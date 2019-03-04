@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<!---Victor Jones
+		C3180704
+		SENG1050
+		Thursday 5-7pm
+		Created: 11/9/17
+		This is the homepage index.html-->
+		
+<!---Page title and CSS settings-->		
+	<head>
+		<meta charset="UTF-8">
+		<title>Online Food Delivery</title>
+		<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+	</head>
+	
+<!---Heading and welcome to webpage-->
+	<body>
+		<h1>Online Food Delivery</h1>
+		<p id="welcome"> Welcome to the online food delivery site. This website serves as a one stop food ordering site 
+			that will allow you to explore various cuisines and order meals for delivery from the cuisine and restaraunt
+			of your choice. This site was created for an assignment at <abbr title="University of Newcastle">UoN</abbr> in 
+			2017 for <abbr title="Web Technologies">SENG1050</abbr>.
+		</p>
+
+<!---Navigation section-->
+		<nav>
+			<a class="data" href="index.html">Homepage</a>
+			<a class="data" href="Data1.xml">Chinese</a>
+			<a class="data" href="Data2.xml">Indian</a>
+			<a class="data" href="Form.html">Review Site</a>
+		</nav>
+	<hr>
+	
+<!---Navigation bar and background control-->
+		<div id="background">
+		<div id="menubar">
+			<h2 id="menu">Cuisines</h2>
+			<ul>
+				<li><a href="#chinese">Chinese</a></li>
+				<li><a href="#indian">Indian</a></li>
+				<li><a href="#italian">Italian</a></li>
+				<li><a href="#mexican">Mexican</a></li>
+				<li><a href="#thai">Thai</a></li>
+			</ul>
+		</div>
+		
+<!---Main site content-->
+		<div class="content">
+		<h2>Cuisines Avaliable</h2>
+		
+<!---Unordered list-->
+		<ul id="contentlist">
+		
+<!---First list item-->
+			<li><a id="chinese">Chinese</a>
+			<p class="contentp"><img src="images/chinese.jpg" alt="Image Missing">The Chinese cuisine features traditional meals from the Chinese culture. 
+					Predominantly centred around dishes containing rice, grains and noodles all seasoned with a variety of herbs and 
+					soy bean products. These dishes can be served with a variety of meat and vegetable combinations. </p><p class="contentp">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eleifend justo laoreet urna gravida placerat. 
+					Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras erat eros,
+					dictum vehicula pulvinar ut, facilisis a dolor. Ut eu feugiat massa. Nunc eu enim ullamcorper, tincidunt enim ut,
+					condimentum metus. Praesent ultricies lacus vehicula, tempus magna a, viverra erat. Nulla et hendrerit justo.
+					Ut nec congue est. Sed dictum bibendum libero quis ullamcorper.
+				</p></li>
+				
+<!---Second list item-->		
+			<li><a id="indian">Indian</a>
+				<p class="contentp"><img src="images/indian.jpg" alt="Image Missing">The Indian cuisine features traditional meals from the Indian culture. Predominantly centred 
+					around dishes containing different lentils, rices and sauces, this cuisine uses locally available spices, herbs, 
+					vegetables, fruits and a variety of meats to create meals.</p><blockquote id="quote" cite="https://www.realsimple.com/food-recipes/cooking-tips-techniques/indian-cuisine">Indian cuisine uses 
+					the whole palette of flavors—spicy, sour, sweet, and hot all at the same time—making it something that wants to jump 
+					off the plate.” -Floyd Cardoz</blockquote> <p class="contentp"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+					Praesent eleifend justo laoreet urna gravida placerat. Pellentesque habitant morbi tristique senectus et netus 
+					et malesuada fames ac turpis egestas. Cras erat eros, dictum vehicula pulvinar ut, facilisis a dolor. 
+					Ut eu feugiat massa. Nunc eu enim ullamcorper, tincidunt enim ut, condimentum metus. Praesent ultricies 
+					lacus vehicula, tempus magna a, viverra erat. Nulla et hendrerit justo. Ut nec congue est. Sed dictum bibendum l
+					ibero quis ullamcorper.</p></li>
+					
+<!---Third list item-->
+			<li><a id="italian">Italian</a>
+				<p class="contentp"><img src="images/italian.jpg" alt="Image Missing">The Italian cuisine features traditional meals
+					from the Italian culture. The Italian cuisine is known for its simplicity, with many dishes having only two to four 
+					main ingredients but usually complex cooking and preparation methods. It has developed through centuries of social 
+					and economic changes and generally consists of pasta and dough based breads, vegetables, olive oil, seafood and 
+					various meats. For more information on famous Italian chefs click <a href="http://www.ranker.com/list/chefs-from-italy/reference"> 
+					here.</a></P><p class="contentp"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eleifend justo laoreet urna gravida placerat. 
+					Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras erat eros, dictum vehicula pulvinar ut, 
+					facilisis a dolor. Ut eu feugiat massa. Nunc eu enim ullamcorper, tincidunt enim ut, condimentum metus. Praesent
+					ultricies lacus vehicula, tempus magna a, viverra erat. Nulla et hendrerit justo. Ut nec congue est. Sed dictum
+					bibendum libero quis ullamcorper.</p></li>
+					
+<!---Fourth list item-->
+			<li><a id="mexican">Mexican</a>
+				<p class="contentp"><img src="images/mexican.jpg" alt="Image Missing">The Mexican cuisine features traditional meals from 
+				the Mexican culture and is primarily a fusion of indigenous Mesoamerican cooking with Spanish elements. Dishes contain 
+				vegetables such as corn, beans, avocados, tomatoes, and chili peppers, along with rice and corn based wraps and chips as 
+				well as domesticated meats and dairy. </p><p class="contentp"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eleifend justo 
+				laoreet urna gravida placerat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+				Cras erat eros, dictum vehicula pulvinar ut, facilisis a dolor. Ut eu feugiat massa. Nunc eu enim ullamcorper, tincidunt 
+				enim ut, condimentum metus. Praesent ultricies lacus vehicula, tempus magna a, viverra erat. Nulla et hendrerit justo. 
+				Ut nec congue est. Sed dictum bibendum libero quis ullamcorper.
+				</p></li>
+				
+<!---Fifth list item-->
+			<li><a id="thai">Thai</a>
+				<p class="contentp"><img src="images/thai.jpg" alt="Image Missing"> Thai cuisine features traditional meals from the Thai culture.
+				Thai cooking places emphasis on lightly
+				prepared dishes with <strong>strong</strong> aromatic components with a <span style="color:red">spicy taste</span> . Thai food is a
+				balance of five flavors: sour, sweet, salty,
+				bitter, and spicy. Thai dishes have a blend of all these flavours, most made with a coconut milk base containing and contain meat 
+				and seafood selections.</p><p class="contentp"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eleifend justo laoreet urna gravida p
+				lacerat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras erat eros, dictum vehicula
+				pulvinar ut, facilisis a dolor. Ut eu feugiat massa. Nunc eu enim ullamcorper, tincidunt enim ut, condimentum metus. Praesent ultricies
+				lacus vehicula, tempus magna a, viverra erat. Nulla et hendrerit justo. Ut nec congue est. Sed dictum bibendum libero quis ullamcorper.
+				</p></li>
+		</ul>
+		</div>
+		<hr>
+		
+		<!---Links to relevant site information. Links open in a new tab saving the position of the view on the homepage-->
+		<a class="data" href="https://media.termsfeed.com/pdf/terms-and-conditions-template.pdf" target="_blank">Terms and Conditions</a>
+		<a class="data" href="http://www.blogtyrant.com/best-about-us-pages/" target="_blank">About Us</a>
+		<a class="data" href=" http://www.blogtyrant.com/best-contact-us-pages/" target="_blank">Contact Us</a>
+		<a class="data" href="https://www.visser.com.au/blog/generic-privacy-policy-for-australian-websites/" target="_blank">Privacy Policiy</a>
+			
+		
+<!---Copyright statemnt and address details-->
+		<address>
+			<br>Victor Jones
+			<br>c3180704@uon.edu.au
+			<br>c3180704
+			<br>Web Technologies
+			<br>&copy; 2017
+		</address>
+	</div>
+	</body>
+</html>
