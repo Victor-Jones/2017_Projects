@@ -1,0 +1,58 @@
+%Victor Jones
+%c3180704
+%assignment 2
+
+%initialisation of array values
+container = zeros(500, 100);
+drop1 = 0.49999999;
+drop2 = 0.50000001;
+hits = 0;
+pause on;
+
+%loop for concentration shift animation
+for t = 0:0.1:50
+    container = circshift(container, [1,0]);
+    container(1,:) = 0;
+    if (drop1 < t) && (t < drop2) && (hits ~= 80)
+        pos = floor(rand()*90+5);
+        pos2 = pos + 5;
+        container((10:20), (pos:pos2)) = container((10:20), (pos:pos2)) + floor(rand()*500);
+        drop1 = drop1 + 0.5;
+        drop2 = drop2 + 0.5;
+        hits = hits + 1;
+    end
+
+%loop for each cell concentration update
+    for i = 1:500
+        for j = 1:100
+            if container(i,j) ~=0
+                for k = (i-1):1:(i+1)
+                    for l = (j-1):1:(j+1)
+                        if i~=k || j~=l
+                            if ((k < 500) && ((l >= 1) && (l <= 100)))     
+                                container(k,l) = container(k,l) + (0.1*(container(i,j)/8));
+                            end
+                        end
+                    end
+                end
+                container (i,j) = container(i,j) - ((container(i,j))/10);
+            end
+        end
+    end
+    
+%container display and labelling    
+surf (container)
+set(gca, 'XLim',[1 100])
+set(gca, 'XTick',(0:10:100))
+set(gca, 'YLim',[1 500])
+set(gca, 'YTick',(0:50:500))
+set(gca, 'ZLim',[0 1000])
+set(gca, 'ZTick',(0:100:1000))
+view ([-130 28])
+ylabel ('length = 500mm')
+xlabel ('width = 100mm')
+zlabel ('concentration mcg/mm^3')
+pause(0.01);
+
+grid on
+end
