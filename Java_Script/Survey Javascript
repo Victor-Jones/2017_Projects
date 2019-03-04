@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!---Victor Jones
+		C3180704
+		SENG1050
+		Thursday 5-7pm
+		Created: 8/10/17
+		Javascript and form-->
+<html>
+	<head>
+	    <meta charset="UTF-8">
+        <script type="text/javascript">
+            //Validation function called later in form on submit click
+            function validate()
+            {
+                //Test to see if the name on form has been filled out
+                if (document.forms["ReviewForm"]["FullName"].value == "")
+                {
+                    alert("Name must be filled out");
+                    return false;
+                }
+
+                //Email address validation test from validation function
+                if (!validateEmail())
+                {
+                    alert("You have entered an invalid email address")
+                    return false;
+                }
+
+                //Gender input test to ensure a radio has been selected
+                if(!document.getElementById("genderMale").checked && !document.getElementById("genderFemale").checked)
+                {
+                    alert("You have not entered a gender")
+                    return false;
+                }
+
+                //test to see if the terms and condiotions have been accepted
+                if(!document.getElementById("tAndC").checked)
+                {
+                    alert("You must accept our terms and conditions to submit")
+                    return false;
+                }
+
+                //test to see if the privacy policy has been read
+                if(!document.getElementById("Privacy").checked)
+                {
+                    alert("You must check you have read our privacy policy")
+                    return false;
+                }
+            }
+
+            //Email Validation function from W3Resources
+            //https://www.w3resource.com/javascript/form/email-validation.php
+            function validateEmail()
+            {
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(ReviewForm.Email.value))
+                {
+                    return (true);
+                }
+                return (false);
+            }
+        </script>
+		<title>Website Feedback</title>
+		<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+	</head>
+	<body>
+		<h1>Online Food Delivery Site Feedback</h1>
+		
+		<!--Navigation Bar -->
+		<nav>
+			<a class="data" href="index.html">Homepage</a>
+			<a class="data" href="Data1.xml">Chinese</a>
+			<a class="data" href="Data2.xml">Indian</a>
+			<a class="data" href="Form.html">Review Site</a>
+		</nav>
+		
+		<hr>
+		
+		<div id="background">
+		
+		<!--Welcome message-->
+		<h2>Welcome to the review page of the Online Food Delivery</h2> 
+
+		<!--Form for data selection-->
+		<form name="ReviewForm" method="post" action="http://www.cs.tut.fi/cgi-bin/run/~jkorpela/echo.cgi" onSubmit="return validate()">
+			<!--Content 2 class division-->
+			<div class="content2">
+				<!--Page Message to ensure data entry-->
+				<p>Please ensure that all the required fields are completed before submitting</p>
+				<p><span style="color:red;">*</span>Denotes required Field</p>
+				<h3>Personal Information</h3>
+				
+				<!-- -->
+				<p><span style="color:red;">*</span>Full Name: <input type="text" name="FullName" value=""></p>
+				
+				<!-- -->
+				<p><span style="color:red;">*</span>Email: <input type="text" name="Email" value=""></p>
+				
+				<!--Age range entry point-->
+				<p>Age Range:<br>
+					<input type="radio" name="Age" value="Younger than 20"> 0-20<br>
+					<input type="radio" name="Age" value="20-30"> 20-30<br>
+					<input type="radio" name="Age" value="31-40"> 31-40<br>
+					<input type="radio" name="Age" value="41-50"> 41-50<br>
+					<input type="radio" name="Age" value="51-60"> 51-60<br>
+					<input type="radio" name="Age" value="Older than 60"> 60+ 
+				</p>
+				
+				<!--Address text entry point-->
+				<p>Address:<input type="text" name="Address" value=""></p>
+				
+				<!--Gender Radio selection point-->
+				<p><span style="color:red;">*</span>Gender:<br>
+					<input type="radio" name="Gender" id="genderMale" value="Male"> Male <br>
+					<input type="radio" name="Gender" id="genderFemale" value="Female"> Female <br>
+				</p>
+				
+				<!--Drop down box viewing device selection-->
+				<p>Viewing Device: 
+					<select id="Platform">
+						<option value="PC">PC</option>
+						<option value="Laptop">Laptop</option>
+						<option value="Mobile">Mobile</option>
+						<option value="Tablet">Tablet</option>
+					</select>
+				</p>
+				
+				<h3>Survey Questions:</h3>
+					<!--Survey Question 1-->
+					<p>1. What was your first reaction to the page?<br>
+						<input type="radio" name="Reaction" value="Very Positive"> Very Positive<br>
+						<input type="radio" name="Reaction" value="Positive"> Positive<br>
+						<input type="radio" name="Reaction" value="Neutral"> Neutral<br>
+						<input type="radio" name="Reaction" value="Negative"> Negative<br>
+						<input type="radio" name="Reaction" value="Very Negative"> Very Negative<br>
+					</p>
+					
+					<!--Survey Question 2-->
+					<p>2. How would you rate the page quality?<br>
+						<input type="radio" name="Quality" value="Very High"> Very High<br>
+						<input type="radio" name="Quality" value="High"> High<br>
+						<input type="radio" name="Quality" value="Neutral"> Neutral<br>
+						<input type="radio" name="Quality" value="Low"> Low<br>
+						<input type="radio" name="Quality" value="Very Low"> Very Low<br>
+					</p>
+					
+					<!--Survey Question 3-->
+					<p>3. How Innovative is our website?<br>
+						<input type="radio" name="Innovative" value="Very Innovative"> Very Innovative<br>
+						<input type="radio" name="Innovative" value="Innovative"> Innovative<br>
+						<input type="radio" name="Innovative" value="Neutral"> Neutral<br>
+						<input type="radio" name="Innovative" value="Not Innovative"> Not Innovative<br>
+						<input type="radio" name="Innovative" value="Not At All"> Not At All<br>
+					</p>
+					
+					<!--Survey Question 4-->
+					<p>4. How likely are you to use this website?<br>
+						<input type="radio" name="Use" value="Very Likely"> Very Likely<br>
+						<input type="radio" name="Use" value="Likely"> Likely<br>
+						<input type="radio" name="Use" value="Neutral"> Neutral<br>
+						<input type="radio" name="Use" value="Not Likely"> Not Likely<br>
+						<input type="radio" name="Use" value="Not At All"> Not At All<br>
+					</p>
+					
+					<!--Survey Question 5-->
+					<p>Rating out of 10:
+						<select id="rating" name="Rating">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+						</select>
+					</p>
+					
+					<!--Aditional Survey Question-->
+					<p>Aditional Comments <i>optional</i>:<br>
+					<textarea name="Comments" rows="10" cols="50"></textarea>
+					</p>
+					
+					<!--Privacy policy and Terms and Conditions accept buttons and links-->
+					<p><input type="checkbox" name="terms" id="tAndC" value="Accepted"><span style="color:red;">*</span>Please accept our <a href="https://media.termsfeed.com/pdf/terms-and-conditions-template.pdf" target="_blank">Terms and Conditions.</a>
+					</p>
+					<p><input type="checkbox" name="privacy" id="Privacy" value="Accepted"><span style="color:red;">*</span>Please ensure you have read our <a href="https://www.visser.com.au/blog/generic-privacy-policy-for-australian-websites/" target="_blank">Privacy Policiy.</a>
+					</p>
+					
+					<!--Submit and cancel data buttons-->
+					<p><input type="submit" value="Submit Form">
+					<input type="reset" value="Clear Form"></p>
+			</div>
+		</form>
+		</div>
+	</body>
+</html>
