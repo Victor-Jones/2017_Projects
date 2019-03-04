@@ -1,0 +1,155 @@
+/* Student No: 3180704
+* Name: Victor Jones
+* Lab: Tuesday 6pm
+* Program: PA1
+* Due Date: 11/09/2016
+* Description: A c program that will calculate the distinct roots of a quaric polynomial using the bisection method to locate the roots.
+* The program relies on the presence of a data file containing values for use with the quartic equation and will output the values of any distinct roots found.*/
+
+#include "stdafx.h"				/*Printf, scanf_s definitions*/
+#include "math.h"				/*Includes definitions for math functions*/
+#define A 1.0					/*First value cconstant for the quartic equation*/
+#define H 0.1					/*Stepsize constant for use in */
+#define ACCURACY 0.000001		/*Accuracy constant*/
+
+double quartic(double, double, double, double, double);			/*Function prototype for quartic equation*/
+double bisection_mid(double, double);							/*Function prototype for bisection method to return midpoint value*/
+
+
+int main(void)
+{
+	FILE *file;
+	
+	int		open_file,											/*Stores result for open file*/
+			file_read,											/*Used to store file data file inputs*/
+			distinct_roots;										/*Used to store value of distinct roots*/
+
+	double	b,													/*Input - value b for use in quartic function read from file*/
+			c,													/*Input - value c for use in quartic function read from file*/
+			d,													/*Input - value d for use in quartic function read from file*/
+			e,													/*Input - value e for use in quartic function read from file*/
+			x1,													/*Input - value used to store x1 for use in quartic function*/
+			x2,													/*Input - value used to store x2 for use in quartic function*/
+			x3,													/*Input - value used to store x3 for use in quartic function*/
+			xinitial,											/*Input - x lower limit read from file*/
+			xfinal,												/*Input - x upper limit read from file*/
+			fx1,												/*Output - Used to store the first output of the quartic function*/
+			fx2,												/*Output - Used to store the second output of the quartic function*/
+			fx3;												/*Output - Used to store the third output of the quartic function*/
+
+		
+
+
+
+										/*File read check*/
+
+		open_file = fopen_s(&file, "U:\\GENG1003\\input1.dat", "r");				/*Open Data file from the Specified location*/
+
+	if (open_file != 0)																/*Test for .DAT file, if no file present print error*/
+
+	{
+		printf("ERROR: Could not open file.\n\n");									/*Printed error message for unavaliable data file*/
+		return (0);
+	}
+
+										/*Reading first input data. Beginning of main function*/
+	else
+	{
+		file_read = fscanf_s(file, "%lf%lf%lf%lf%lf%lf", &b, &c, &d, &e, &xinitial, &xfinal);
+
+										/*Prints program heading*/
+		printf("----------------------------------------------------\n");
+		printf("Root Calculator for Quartic Polynomials\n");
+		printf("----------------------------------------------------\n");
+
+										/*While loop to read data until the end of the input file*/
+		while (file_read != EOF)
+		{
+										/*Printing of Output template at the beginning of each data set*/
+			printf("\n\nFor quartic polynomial a=1; b=%.5f; c=%.5f; d=%.5f; e=%.5f;\n", b, c, d, e);
+			printf("With range from %.5f to %.5f\n", xinitial, xfinal);
+			printf("Gives F(x)= zero at the following values of x\nx= ");
+
+										/*Set initial conditions*/
+			distinct_roots = 0;
+			x1 = xinitial;
+
+					do
+					{
+										/*Looped quartic equation to find sign change */
+						fx1 = quartic(x1, b, c, d, e);
+						x2 = x1 +H;
+						fx2 = quartic(x2, b, c, d, e);
+					
+										/*Condition to begin bisection method*/
+					if ((fx1 < 0.0 && fx2 > 0.0) || (fx1 > 0.0 && fx2 < 0.0))	
+						{
+							do
+							{
+										/*Bisection method loop*/
+								x3 = bisection_mid(x1, x2);
+								fx3 = quartic(x3, b, c, d, e);
+
+										/*Condition for x2 repalcement with bisection value*/
+								if ((fx3 < 0.0 && fx1 > 0.0) || (fx3 > 0.0 && fx1 < 0.0))
+								{
+									x2 = x3;
+								}
+											
+										/*Condition for x1 replacement with bisection value*/
+								if ((fx3 < 0.0 && fx2 > 0.0) || (fx3 > 0.0 && fx2 < 0.0))
+								{
+									x1 = x3;
+								}
+
+										/*Loop condition testing the proximity to zero of the quartic function*/
+								} while (fx3 > ACCURACY || fx3 < -ACCURACY);
+										
+										/*Prints found root and adds to total root counter*/
+						printf("%.5f, ", x3);
+						distinct_roots++;
+						}
+										/*Sets next iteration values*/
+						x1 = x2;
+
+					} while (x1 <= xfinal);
+
+										/*Prints number of found roots and reads in next data set*/
+			printf("\n%d distinct roots found", distinct_roots);
+			file_read = fscanf_s(file, "%lf%lf%lf%lf%lf%lf", &b, &c, &d, &e, &xinitial, &xfinal);
+		}
+
+	}
+
+	fclose(file);
+    return 0;
+}
+
+/* Purpose: Function to define the output of the quartic equation
+* Input variables:
+* double: x,	The input value of x set by the function conditions.
+*		  b,	b value read from file.
+*		  c,	c value read from file.
+*		  d,	d value read from file.
+*		  e,	e value read from file.
+* Results: Returns the computed value of the quartic
+*/
+
+double
+quartic(double x, double b, double c, double d, double e)
+{
+	return ((A*x*x*x*x) + (b*x*x*x) + (c*x*x) + (d*x) + e);
+}
+
+/* Purpose: Function to define the bisection method equation
+* Input variables:
+* double: x1,	the initial x value.
+*		  x2,	the stepped x+H value.
+* Results: Returns the computed value of the bisection midpoint
+*/
+
+double
+bisection_mid(double x1, double x2)
+{
+	return ((x1 + x2) / 2);
+}
