@@ -1,0 +1,804 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+/***************************************************************************************
+ *Names: Victor Jones, Robert Toy.                                                     *
+ *Student: c3180704     c                                                             
+ *Date: 1/10/2017                                                                      *
+ *Program: This program is a form based dice rolling simulator game called Plus Moins. *
+ *The program allows one player to vs another player or a computer to aim for a set    *
+ * score.                                                                              *
+ ***************************************************************************************/
+
+namespace VictorJonesRobertToy
+{
+    public partial class PlusMoins : Form
+    {
+        Random rnd = new Random();
+        int iRollCount = 0, iScore = 0, iPlayer = 0, iGoal = 0;
+        int iDice1, iDice2, iDice3, iDice4, iDice5, iPlayer1Score, iPlayer2Score;
+        bool bSinglePlayer = false;
+        SolidBrush brshBlack = new SolidBrush(Color.Black);
+        SolidBrush brshWhite = new SolidBrush(Color.White);
+
+        public PlusMoins()
+        {
+            InitializeComponent();
+            tbxOutput.Text = "Welcome to Plus Moins. Please select single player or not and set a goal to reach.";
+            tbxPlayer1Score.Text = "0";
+            tbxPlayer2Score.Text = "0";
+        }
+
+        private void btnNewGame_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogN = MessageBox.Show("Are you sure you want to start a new game?\r\n (This will erase current game score)", "New Game?", MessageBoxButtons.YesNo);
+            if(dialogN == DialogResult.Yes)
+            {
+                unlockAll();
+                reset();
+            }
+        }
+
+        private void lockAll()
+        {
+            cbxDice1.Enabled = false;
+            cbxDice2.Enabled = false;
+            cbxDice3.Enabled = false;
+            cbxDice4.Enabled = false;
+            cbxDice5.Enabled = false;
+            tbxRoundScore.Enabled = false;
+            tbxPlayer1Score.Enabled = false;
+            tbxPlayer2Score.Enabled = false;
+            btnRoll.Enabled = false;
+            tbxGoal.Enabled = false;
+            btnSetGoal.Enabled = false;
+            cbxSinglePlayer.Enabled = false;
+            lblGoal.Enabled = false;
+            btnEnd.Enabled = false;
+        }
+
+        private void unlockAll()
+        {
+            cbxDice1.Enabled = true;
+            cbxDice2.Enabled = true;
+            cbxDice3.Enabled = true;
+            cbxDice4.Enabled = true;
+            cbxDice5.Enabled = true;
+            tbxRoundScore.Enabled = true;
+            tbxPlayer1Score.Enabled = true;
+            tbxPlayer2Score.Enabled = true;
+            btnRoll.Enabled = true;
+            tbxGoal.Enabled = true;
+            btnSetGoal.Enabled = true;
+            cbxSinglePlayer.Enabled = true;
+            lblGoal.Enabled = true;
+            btnEnd.Enabled = true;
+        }
+
+        private void reset()
+        {
+            iPlayer = 0;
+            iGoal = 0;
+            iRollCount = 0;
+            iScore = 0;
+            iPlayer1Score = 0;
+            iPlayer2Score = 0;
+            tbxPlayer1Score.Text = null;
+            tbxPlayer2Score.Text = null;
+            cbxReset();
+            pbxReset();
+            tbxGoal.Clear();
+            tbxGoal.Enabled = true;
+            btnSetGoal.Enabled = true;
+            cbxSinglePlayer.Enabled = true;
+            lblGoal.Enabled = true;
+            cbxSinglePlayer.Checked = false;
+            bSinglePlayer = false;
+            tbxOutput.AppendText("\r\nNew Game");
+        }
+
+        private void btnSetSore_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tbxGoal.Text))
+            {
+                tbxOutput.AppendText("\r\nYou must set a score before beginning the game.");
+            }
+            else
+            {
+                iGoal = Convert.ToInt32(tbxGoal.Text);
+                if (iGoal <= 0)
+                {
+                    tbxOutput.AppendText("\r\nYou must set a score greater than zero.");
+                }
+                else
+                {
+                    if (cbxSinglePlayer.Checked)
+                    {
+                        bSinglePlayer = true;
+                    }
+                    iGoal = Convert.ToInt32(tbxGoal.Text);
+                    tbxGoal.Enabled = false;
+                    btnSetGoal.Enabled = false;
+                    cbxSinglePlayer.Enabled = false;
+                    lblGoal.Enabled = false;
+                    tbxOutput.AppendText("\r\nThe target for each player to reach is " + Convert.ToString(iGoal));
+                    tbxOutput.AppendText("\r\n \r\nPlayer 1 please roll the dice.");
+                }
+            }
+        }
+
+        //dice roll click
+        private void btnRoll_Click(object sender, EventArgs e)
+        {
+            if (iRollCount == 0 && btnSetGoal.Enabled)
+            {
+                tbxOutput.AppendText("\r\nYou must set a score and choose number of players before beginning the game.");
+            }
+            else if (iRollCount > 3)
+            {
+                tbxOutput.AppendText("\r\nYou have no rolls remaining, Please end your turn");
+            }
+            else if (cbxDice1.Checked && cbxDice2.Checked && cbxDice3.Checked && cbxDice4.Checked && cbxDice5.Checked)
+            {
+                tbxOutput.AppendText("\r\nIf you want to hold all your dice, just end your turn");
+            }
+            else
+            {
+                if (iRollCount == 0)
+                {
+                    iRollCount = 1;
+                    cbxReset();
+                    iDice1 = diceroll();
+                    iDice2 = diceroll();
+                    iDice3 = diceroll();
+                    iDice4 = diceroll();
+                    iDice5 = diceroll();
+                    iScore = score(iDice1, iDice2, iDice3, iDice4, iDice5);
+                    tbxRoundScore.Text = Convert.ToString(iScore);
+                    paintdice(iDice1, pbxDice1);
+                    paintdice(iDice2, pbxDice2);
+                    paintdice(iDice3, pbxDice3);
+                    paintdice(iDice4, pbxDice4);
+                    paintdice(iDice5, pbxDice5);
+                    tbxOutput.AppendText("\r\nRoll 1 results: " + Convert.ToString(iDice1) + ", " + Convert.ToString(iDice2) + ", " + Convert.ToString(iDice3) + ", " + Convert.ToString(iDice4) + ", " + Convert.ToString(iDice5) + ".");
+                    tbxOutput.AppendText("\r\nRoll Score: " + Convert.ToString(iScore));
+                }
+                else
+                {
+                    // need to create checkbox method for dice re-rolls
+                    if (!cbxDice1.Checked)
+                    {
+                        iDice1 = diceroll();
+                        paintdice(iDice1, pbxDice1);
+                    }
+                    if (!cbxDice2.Checked)
+                    {
+                        iDice2 = diceroll();
+                        paintdice(iDice2, pbxDice2);
+                    }
+                    if (!cbxDice3.Checked)
+                    {
+                        iDice3 = diceroll();
+                        paintdice(iDice3, pbxDice3);
+                    }
+                    if (!cbxDice4.Checked)
+                    {
+                        iDice4 = diceroll();
+                        paintdice(iDice4, pbxDice4);
+                    }
+                    if (!cbxDice5.Checked)
+                    {
+                        iDice5 = diceroll();
+                        paintdice(iDice5, pbxDice5);
+                    }
+                    iScore = score(iDice1, iDice2, iDice3, iDice4, iDice5);
+                    tbxRoundScore.Text = Convert.ToString(iScore);
+                    tbxOutput.AppendText("\r\nRoll "+ Convert.ToString(iRollCount)+": " + Convert.ToString(iDice1) + ", " + Convert.ToString(iDice2) + ", " + Convert.ToString(iDice3) + ", " + Convert.ToString(iDice4) + ", " + Convert.ToString(iDice5) + ".");
+                    tbxOutput.AppendText("\r\nRoll Score: " + Convert.ToString(iScore));
+                }
+                iRollCount++;
+            }
+        }
+
+        private void tbxOutput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        //Round score calculation method
+        private int score(int iD1, int iD2, int iD3, int iD4, int iD5)
+        {
+            int rScore = 0;
+            int[] s = new int[6];
+
+            int[] diceNumbers = new int[] { iD1, iD2, iD3, iD4, iD5 };
+
+            //Count occurance of each number
+            for(int i=0;i<5;i++)
+            {
+                if (diceNumbers[i] == 1) {
+                    s[0]++;
+                }
+                else if (diceNumbers[i] == 2)
+                {
+                    s[1]++;
+                }
+                else if (diceNumbers[i] == 3)
+                {
+                    s[2]++;
+                }
+                else if (diceNumbers[i] == 4)
+                {
+                    s[3]++;
+                }
+                else if (diceNumbers[i] == 5)
+                {
+                    s[4]++;
+                }
+                else if (diceNumbers[i] == 6)
+                {
+                    s[5]++;
+                }
+            }
+            //check for 'of a kind'
+            //stores largest multiple number
+            int max = 0;
+            for(int i=0;i<6;i++)
+            {
+                if (s[i] > max)
+                {
+                    max = s[i];
+                }
+            }
+            //check for sequence
+            //stores largest sequence
+            int seq = 0;
+            int storeSeq = 0;
+            for(int i=0;i<6;i++)
+            {
+
+                if(s[i] > 0)
+                {
+                    seq++;
+                    //if seq ends on 6
+                    if(i == 5)
+                    {
+                        //if sequence is bigger than previous
+                        if(seq > storeSeq)
+                        storeSeq = seq;
+                    }
+                }
+                else if(s[i] == 0)
+                {
+                    //if sequence is bigger than previous
+                    if (seq > storeSeq)
+                    {
+                        storeSeq = seq;
+                    }
+                    seq = 0;
+                }
+            }
+
+            //five of a kind
+            if (max == 5)
+            {
+                rScore = 30;
+            }
+            //sequence of 5
+            else if (storeSeq == 5)
+            {
+                rScore = 25;
+            }
+            //four of a kind
+            else if (max == 4)
+            {
+                rScore = 20;
+            }
+            //sequence of four
+            else if (storeSeq == 4)
+            {
+                rScore = 15;
+            }
+            //three of a kind
+            else if (max == 3)
+            {
+                rScore = 10;
+            }
+            //sequence of three
+            else if (storeSeq == 3)
+            {
+                rScore = 5;
+            }
+            //check if sum even or odd
+            int iSum;
+            iSum = (iD1 + iD2 + iD3 + iD4 + iD5);
+            if (iSum % 2 != 0)
+            {
+                rScore = 0 - rScore;
+            }
+
+            return rScore;
+        }
+
+        //end turn button event
+        private void btnEnd_Click(object sender, EventArgs e)
+        {
+            if (iRollCount == 0)
+            {
+                tbxOutput.AppendText("\r\nYou cant end your turn without rolling.");
+            }
+            else
+            {
+                iRollCount = 0;
+                tbxRoundScore.Text = "0";
+                cbxReset();
+                pbxReset();
+
+
+                if (iPlayer == 0)
+                {
+                    iPlayer1Score = iPlayer1Score + iScore;
+                    iPlayer = 1;
+                    tbxPlayer1Score.Text = Convert.ToString(iPlayer1Score);
+                    if (iPlayer1Score <= 0 - iGoal)
+                    {
+                        //lose
+                        tbxOutput.AppendText("\r\n \r\nPlayer 1 Loses");
+                        lockAll();
+                    }
+                    else if (iPlayer1Score >= iGoal) {
+                        //win
+                        tbxOutput.AppendText("\r\n \r\nPlayer 1 Wins");
+                        lockAll();
+                        //lock buttons?
+                    }
+                    else
+                    {
+                        tbxOutput.AppendText("\r\n \r\nPlayer 2 turn. Roll your dice!");
+                        if (bSinglePlayer)
+                        {
+                            //ai turn
+                            cTurn();
+                        }
+                    }
+                }
+                else
+                {
+                       
+                    iPlayer2Score = iPlayer2Score + iScore;
+                    iPlayer = 0;
+                    tbxPlayer2Score.Text = Convert.ToString(iPlayer2Score);
+                    if (iPlayer2Score <= 0 - iGoal)
+                    {
+                        //lose
+                        tbxOutput.AppendText("\r\n \r\nPlayer 2 Loses");
+                        lockAll();
+                    }
+                    else if (iPlayer2Score >= iGoal)
+                    {
+                        //win
+                        tbxOutput.AppendText("\r\n \r\nPlayer 2 Wins");
+                        lockAll();
+                        //lock buttons?
+                    }
+                    else
+                    {
+                        tbxOutput.AppendText("\r\n \r\nPlayer 1 turn. Roll your dice!");
+                    } 
+                }
+            }  
+        }
+
+        //ai turn
+        private void cTurn()
+        {
+            
+            int rGoal = iGoal - iPlayer2Score;
+
+            btnRoll.BackColor = SystemColors.MenuHighlight;
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(1000);
+
+            btnRoll_Click(null, EventArgs.Empty);
+            btnRoll.BackColor = SystemColors.Control;
+            Application.DoEvents();
+            //wait 2 seconds
+            //Application.DoEvents();
+            System.Threading.Thread.Sleep(1000);
+            if(iRollCount > 3)
+            {
+                btnEnd.BackColor = SystemColors.MenuHighlight;
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(1000);
+                btnEnd_Click(null, EventArgs.Empty);
+                btnEnd.BackColor = SystemColors.Control;
+                Application.DoEvents();
+                return;
+            }
+            
+
+            if (rGoal >= 30 || rGoal <= -30)
+            {
+                if (iScore >= 15 || (rGoal <= -30 && iScore <= -15) )
+                {
+                    //half is good enough
+                    btnEnd.BackColor = SystemColors.MenuHighlight;
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(1000);
+                    btnEnd_Click(null, EventArgs.Empty);
+                    btnEnd.BackColor = SystemColors.Control;
+                    Application.DoEvents();
+                    return;
+                }
+                else
+                {
+                    // try five of a kind
+                    fHold(30);
+                }
+            }
+            else if (rGoal == 25 || rGoal == -25)
+            {
+                if (iScore >= 10 || (rGoal <= -25 && iScore <= -10))
+                {
+                    //half is good enough
+                    btnEnd.BackColor = SystemColors.MenuHighlight;
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(1000);
+                    btnEnd_Click(null, EventArgs.Empty);
+                    btnEnd.BackColor = SystemColors.Control;
+                    Application.DoEvents();
+                    return;
+                }
+                else
+                {
+                    // try sequence of 5
+                    fHold(25);
+                }
+            }
+            else if (rGoal == 20 || rGoal == -20)
+            {
+                if (iScore >= 10 || (rGoal <= -20 && iScore <= -10))
+                {
+                    //half is good enough
+                    btnEnd.BackColor = SystemColors.MenuHighlight;
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(1000);
+                    btnEnd_Click(null, EventArgs.Empty);
+                    btnEnd.BackColor = SystemColors.Control;
+                    Application.DoEvents();
+                    return;
+                }
+                else
+                {
+                    //try four of a kind
+                    fHold(20);
+                }
+            }
+            else if (rGoal == 15 || rGoal == -15)
+            {
+                //try sequence of 4
+                if (iScore >= 5 || (rGoal <= -20 && iScore <= -5))
+                {
+                    //half is good enough
+                    btnEnd.BackColor = SystemColors.MenuHighlight;
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(1000);
+                    btnEnd_Click(null, EventArgs.Empty);
+                    btnEnd.BackColor = SystemColors.Control;
+                    Application.DoEvents();
+                    return;
+                }
+                else
+                {
+                    //try four of a kind
+                    fHold(15);
+                }
+            }
+            else if (rGoal == 10 || rGoal == -10)
+            {
+                //try three of a kind
+                fHold(10);
+            }
+            else if (rGoal == 5 || rGoal == -5)
+            {
+                //try sequence of three
+                fHold(5);
+            }
+            if (iScore >= rGoal || iRollCount > 3)
+            {
+                //wait 2 seconds
+                btnEnd.BackColor = SystemColors.MenuHighlight;
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(1000);
+                btnEnd_Click(null, EventArgs.Empty);
+                btnEnd.BackColor = SystemColors.Control;
+                Application.DoEvents();
+                return;
+            }
+            //reroll?
+            //wait 2 seconds
+            //Application.DoEvents();
+            System.Threading.Thread.Sleep(1000);
+            Application.DoEvents();
+            cTurn();      
+        }
+
+        //find holds
+        private void fHold(int goal)
+        {
+            int[] diceNumbers = new int[] { iDice1, iDice2, iDice3, iDice4, iDice5 };
+
+            int[] s = new int[6];
+
+            //Count occurance of each number
+            for (int i = 0; i < 5; i++)
+            {
+                if (diceNumbers[i] == 1)
+                {
+                    s[0]++;
+                }
+                else if (diceNumbers[i] == 2)
+                {
+                    s[1]++;
+                }
+                else if (diceNumbers[i] == 3)
+                {
+                    s[2]++;
+                }
+                else if (diceNumbers[i] == 4)
+                {
+                    s[3]++;
+                }
+                else if (diceNumbers[i] == 5)
+                {
+                    s[4]++;
+                }
+                else if (diceNumbers[i] == 6)
+                {
+                    s[5]++;
+                }
+            }
+            //check for 'of a kind'
+            //stores largest multiple number
+            int max = 0;
+            int dMax = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                if (s[i] > max)
+                {
+                    max = s[i];
+                    dMax = i;
+                }
+            }
+            dMax++;
+            //check for sequence
+            //stores largest sequence
+            int dSeq = 0;
+            //dSeq = start of sequence
+            int seq = 0;
+            int storeSeq = 0;
+            for (int i = 0; i < 6; i++)
+            {
+
+                if (s[i] > 0)
+                {
+                    seq++;
+                    //if seq ends on 6
+                    if (i == 5)
+                    {
+                        //if sequence is bigger than previous
+                        if (seq > storeSeq)
+                        {
+                            storeSeq = seq;
+                            dSeq = 6 - seq;
+                            dSeq++;
+                        }
+                    }
+                }
+                else if (s[i] == 0)
+                {
+                    //if sequence is bigger than previous
+                    if (seq > storeSeq)
+                    {
+                        storeSeq = seq;
+                        dSeq = i+1 - seq;
+                    }
+                    seq = 0;
+                }
+            }
+
+            if (goal >= 30 || goal <= -30)
+            {
+                //try five of a kind for 30
+                if(storeSeq > max)
+                {
+                    //if sequence is present
+                    sHold(diceNumbers, storeSeq, dSeq);
+                }
+                else
+                {
+                    //try for 'of a kind'
+                    kHold(dMax);
+                }
+                
+            }
+            else
+            {
+                //goal 25 or less
+                if (storeSeq > max)
+                {
+                    //if sequence is present
+                    sHold(diceNumbers, storeSeq, dSeq);
+                }
+                else
+                {
+                    //try for 'of a kind'
+                    kHold(dMax);
+                }
+
+            }
+        }
+
+        private void kHold(int iHeld)
+        {
+            //holds the number x amount of times for each 'of a kind'
+            //remove checks
+            cbxReset();
+            
+            if (iDice1 == iHeld)
+            {
+                cbxDice1.Checked = true;
+            }
+            if (iDice2 == iHeld)
+            {
+                cbxDice2.Checked = true;
+            }
+            if (iDice3 == iHeld)
+            {
+                cbxDice3.Checked = true;
+            }
+            if (iDice4 == iHeld)
+            {
+                cbxDice4.Checked = true;
+            }
+            if (iDice5 == iHeld)
+            {
+                cbxDice5.Checked = true;
+            }
+            if (iScore == -30)
+            {
+                cbxDice1.Checked = false;
+            }
+        }
+
+        private void sHold(int[] diceNumbers, int storeSeq, int dSeq)
+        {
+            CheckBox[] cNumb = new CheckBox[] { cbxDice1, cbxDice2, cbxDice3, cbxDice4, cbxDice5 };
+            //remove checks
+            cbxReset();
+            int x;
+            //dSeq = start of sequence
+            //storeSeq = how many in sequence
+            //
+            x = storeSeq;
+            if (x == 5 && dSeq == 1)
+            {
+                dSeq++;
+                storeSeq--;
+            }
+            while (storeSeq > 0)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    if (diceNumbers[i] == dSeq)
+                    {
+                        cNumb[i].Checked = true;
+                        storeSeq--;
+                        dSeq++;
+                        break;
+                    }
+                }
+               
+            }         
+        }
+
+        //dice roll methode 
+        private int diceroll()
+        {
+            int dice = rnd.Next(1, 7);
+            return dice;
+        }
+
+        //clears checkboxes
+        private void cbxReset()
+        {
+            cbxDice1.Checked = false;
+            cbxDice2.Checked = false;
+            cbxDice3.Checked = false;
+            cbxDice4.Checked = false;
+            cbxDice5.Checked = false;
+        }
+
+        //clears dice images
+        private void pbxReset()
+        {
+            pbxDice1.Image = null;
+            pbxDice2.Image = null;
+            pbxDice3.Image = null;
+            pbxDice4.Image = null;
+            pbxDice5.Image = null;
+        }
+
+
+        //method used to simulate dice rolling via animation
+        private void diceanimate(PictureBox pbxDiceBox)
+        {
+            int i, roll;
+            Random rnd1 = new Random();
+            int animate = rnd1.Next(1, 40);
+
+            for (i=0; i < animate; i++)
+            {
+                roll = diceroll();
+                paintdice(roll, pbxDiceBox);
+            }
+        }
+
+        //metthod used to draw dice face value on game form
+        private void paintdice(int i, PictureBox pbxDiceBox)
+        {
+            Graphics graDice = pbxDiceBox.CreateGraphics();
+            graDice.FillRectangle(brshWhite, 0, 0, 70, 70);
+
+            if (i == 1)
+            {
+                graDice.FillEllipse(brshBlack, 25, 25, 17, 17);
+            }
+            if (i == 2)
+            {
+                graDice.FillEllipse(brshBlack, 5, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 45, 17, 17);
+            }
+            if (i == 3)
+            {
+                graDice.FillEllipse(brshBlack, 5, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 25, 25, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 45, 17, 17);
+            }
+            if (i == 4)
+            {
+                graDice.FillEllipse(brshBlack, 5, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 45, 17, 17);
+                graDice.FillEllipse(brshBlack, 5, 45, 17, 17);
+            }
+            if (i == 5)
+            {
+                graDice.FillEllipse(brshBlack, 5, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 25, 25, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 45, 17, 17);
+                graDice.FillEllipse(brshBlack, 5, 45, 17, 17);
+
+            }
+            if (i == 6)
+            {
+                graDice.FillEllipse(brshBlack, 5, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 25, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 5, 17, 17);
+                graDice.FillEllipse(brshBlack, 25, 45, 17, 17);
+                graDice.FillEllipse(brshBlack, 45, 45, 17, 17);
+                graDice.FillEllipse(brshBlack, 5, 45, 17, 17);
+            }
+        }
+    }
+}
+
